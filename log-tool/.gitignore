@@ -1,0 +1,10 @@
+# 忽略所有 .class 文件
+*.class
+
+# 忽略 target 目录
+/target/
+# 忽略 IntelliJ IDEA 配置文件和编译输出目录
+.idea/
+*.iml
+.mvn/
+!/src/main/resources/rebel.xml
