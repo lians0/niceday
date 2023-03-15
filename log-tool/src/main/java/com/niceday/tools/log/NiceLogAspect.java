@@ -8,11 +8,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Aspect // 声明这是一个切面
-@Component // 将切面作为一个组件交给Spring管理
-
+@Aspect
+@Component
 public class NiceLogAspect {
 
+    /**
+     * 带有返回值的日志
+     *
+     * @param joinPoint
+     * @param startTime
+     * @param result
+     * @param endTime
+     * @param annotation
+     */
     private static void haveResultLog(ProceedingJoinPoint joinPoint, long startTime, Object result, long endTime, NiceLog annotation) {
         normalLog(joinPoint, annotation);
         String className = joinPoint.getTarget().getClass().getName();
@@ -35,6 +43,12 @@ public class NiceLogAspect {
         System.out.println();
     }
 
+    /**
+     * 无返回值日志
+     *
+     * @param joinPoint
+     * @param annotation
+     */
     private static void normalLog(ProceedingJoinPoint joinPoint, NiceLog annotation) {
         // 判断是否需要打印所在类名
         if (annotation.logClass()) {
@@ -80,16 +94,18 @@ public class NiceLogAspect {
         return result;
     }
 
+    /**
+     * 获取注解值
+     *
+     * @param joinPoint 切点
+     * @return
+     */
     private NiceLog getAnnotation(ProceedingJoinPoint joinPoint) {
         NiceLog annotation = (NiceLog) joinPoint.getSignature().getDeclaringType().getAnnotation(NiceLog.class);
         if (annotation == null) {// 如果类上没有注解，则获取方法上的注解
-//            annotation = ((MethodSignature) joinPoint.getSignature())..getAnnotation(CustomAnnotation.class);
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             annotation = signature.getMethod().getAnnotation(NiceLog.class);
-
-
         }
         return annotation;
     }
-
 }
